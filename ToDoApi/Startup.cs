@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDoApi.Models;
 using System.Reflection;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace ToDoApi
 {
@@ -32,7 +33,13 @@ namespace ToDoApi
         {
             services.AddDbContext<ToDoContext>(opt =>
                                                opt.UseInMemoryDatabase("TodoList"));
-            services.AddControllers();
+            //services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.RespectBrowserAcceptHeader = true; // false by default
+                //options.OutputFormatters.RemoveType<StringOutputFormatter>();
+                //options.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
+            });
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoApi", Version = "v1" });
