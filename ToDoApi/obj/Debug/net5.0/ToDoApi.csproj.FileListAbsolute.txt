@@ -134,3 +134,5 @@ D:\ToDoApi\ToDoApi\bin\Debug\net5.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.re
 D:\ToDoApi\ToDoApi\bin\Debug\net5.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\ToDoApi\ToDoApi\bin\Debug\net5.0\runtimes\win-arm\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 D:\ToDoApi\ToDoApi\bin\Debug\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
+D:\ToDoApi\ToDoApi\bin\Debug\net5.0\ToDoApi.xml
+D:\ToDoApi\ToDoApi\obj\Debug\net5.0\ToDoApi.xml

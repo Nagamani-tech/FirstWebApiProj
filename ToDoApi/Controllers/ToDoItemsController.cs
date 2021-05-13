@@ -9,6 +9,7 @@ using ToDoApi.Models;
 
 namespace ToDoApi.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class ToDoItemsController : ControllerBase
@@ -74,7 +75,27 @@ namespace ToDoApi.Controllers
 
         // POST: api/ToDoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Creates a TodoItem.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Todo
+        ///     {
+        ///        "id": 1,
+        ///        "name": "Item1",
+        ///        "isComplete": true
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="todoItemDto"></param>
+        /// <returns>A newly created TodoItem</returns>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If the item is null</response>  
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TodoItemDTO>> PostToDoItem(TodoItemDTO todoItemDto)
         {
             _context.TodoItemsDTOs.Add(todoItemDto);
@@ -84,6 +105,10 @@ namespace ToDoApi.Controllers
             return CreatedAtAction(nameof(GetToDoItem), new { id = todoItemDto.Id }, todoItemDto);
         }
 
+        /// <summary>
+        /// Deletes a specific TodoItem.
+        /// </summary>
+        /// <param name="id"></param>
         // DELETE: api/ToDoItems/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteToDoItem(long id)
