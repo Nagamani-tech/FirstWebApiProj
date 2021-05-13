@@ -12,6 +12,7 @@ namespace ToDoApi.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
+    [FormatFilter]
     public class ToDoItemsController : ControllerBase
     {
         private readonly ToDoContext _context;
@@ -29,7 +30,8 @@ namespace ToDoApi.Controllers
         }
 
         // GET: api/ToDoItems/5
-        [HttpGet("{id}")]
+        //[HttpGet("{id}")]
+        [HttpGet("{id}.{format?}")]   //eg:  /api/ToDoItems/5.json  or /api/ToDoItems/5.xml  --maps the response format to the appropriate formatter when the response is created.
         public async Task<ActionResult<TodoItemDTO>> GetToDoItem(long id)
         {
             var toDoItem = await _context.TodoItemsDTOs.FindAsync(id);
