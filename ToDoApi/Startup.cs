@@ -16,6 +16,10 @@ using ToDoApi.Models;
 using System.Reflection;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using ToDoApi.Filters;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Http;
 
 namespace ToDoApi
 {
@@ -34,12 +38,31 @@ namespace ToDoApi
             services.AddDbContext<ToDoContext>(opt =>
                                                opt.UseInMemoryDatabase("TodoList"));
             //services.AddControllers();
+            
+            services.AddControllers()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.ClientErrorMapping[StatusCodes.Status404NotFound].Link =
+                  "https://httpstatuses.com/404";
+                options.InvalidModelStateResponseFactory = context =>
+                  {
+                    var result = new BadRequestObjectResult(context.ModelState);
+
+                   // TODO: add `using System.Net.Mime;` to resolve MediaTypeNames
+                    result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                    result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+
+                    return result;
+                  };
+            });
             services.AddControllers(options =>
             {
+                options.Filters.Add(new HttpResponseExceptionFilter());
                 options.RespectBrowserAcceptHeader = true; // false by default
                 //options.OutputFormatters.RemoveType<StringOutputFormatter>();
                 //options.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
             });
+            //services.AddTransient<ProblemDetailsFactory, CustomProblemDetailsFactory>();
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoApi", Version = "v1" });
@@ -77,7 +100,8 @@ namespace ToDoApi
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/error-local-development");
                 app.UseStaticFiles();
                 //app.UseSwagger();
                 //This 2.0 format is important for integrations such as Microsoft Power Apps and Microsoft Flow that currently support OpenAPI version 2.0. To opt into the 2.0 format, set the SerializeAsV2 property
@@ -90,6 +114,10 @@ namespace ToDoApi
                 {
                     c.InjectStylesheet("/swagger-ui/custom.css");
                 });
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();
