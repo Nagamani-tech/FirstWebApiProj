@@ -32,6 +32,9 @@ namespace ToDoApi.Controllers
         // GET: api/ToDoItems/5
         //[HttpGet("{id}")]
         [HttpGet("{id}.{format?}")]   //eg:  /api/ToDoItems/5.json  or /api/ToDoItems/5.xml  --maps the response format to the appropriate formatter when the response is created.
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<ActionResult<TodoItemDTO>> GetToDoItem(long id)
         {
             var toDoItem = await _context.TodoItemsDTOs.FindAsync(id);
@@ -47,6 +50,10 @@ namespace ToDoApi.Controllers
         // PUT: api/ToDoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> PutToDoItem(long id, TodoItemDTO toDoItemDto)
         {
             if (id != toDoItemDto.Id)
@@ -113,6 +120,9 @@ namespace ToDoApi.Controllers
         /// <param name="id"></param>
         // DELETE: api/ToDoItems/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> DeleteToDoItem(long id)
         {
             var todoItemDto = await _context.TodoItemsDTOs.FindAsync(id);
